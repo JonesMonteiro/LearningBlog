@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use App\Mail\Emailpost;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/posts', [PostController::class, 'index'])->name('post.index');
 });
+
+Route::get('/postroute', function(){
+    $name = "LearningBlog";
+
+    Mail::to("hello@example.com")->send(new Emailpost($name));
+    return redirect()->route('post.index');
+})->name('posts.send');
 
 Route::resource('post', PostController::class)
     ->only(['index', 'store', 'edit', 'update', 'destroy'])
